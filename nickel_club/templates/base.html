@@ -1,0 +1,39 @@
+<html>
+  <head>
+		<title>{% block title %}{% endblock %} - Nickel Club</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <style>
+    .content {
+      padding: 15px;
+    }
+
+		.flash {
+			color: darkblue;
+		}
+
+		.header {
+			margin-bottom: 8px;
+		}
+    </style>
+		{% block pagestyle %}{% endblock %}
+  </head>
+  <body>
+		<nav>
+			<!-- TODO this should link to nickel index not admin index -->
+			<h1><a href="{{ url_for('admin.index') }}">Nickel Club</a></h1>
+			{% if g.admin %}
+			<div><a href="{{ url_for('admin.logout') }}">Log Out</a></div>
+			{% endif %}
+		</nav>
+		<section class="content">
+			<header class="header">
+				{% block header %}{% endblock %}
+				{% for message in get_flashed_messages() %}
+				<div class="flash">{{ message }}</div>
+				{% endfor %}
+			</header>
+			{% block content %}{% endblock %}
+		</section>
+	</body>
+</html>
+

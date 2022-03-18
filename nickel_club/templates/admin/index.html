@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}Admin{% endblock %}</h1>
+{% endblock %}
+
+{% block pagestyle %}
+<style>
+.friends-table {
+	width: 100%;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+	<h2>Members</h2>
+	<form method="POST">
+		<table class="table friends-table">
+			<thead>
+				<tr>
+					<th scope="col">Name</th>
+					<th scope="col">Nickels</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for member in members %}
+				<tr>
+					<td>{{member.name}}</td>
+					<td>
+						<input name="{{member.id}}-nickels" type="number" value="{{member.nickels}}"></td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+</div>
+
+<div>
+	<h2>Change admin password</h2>
+	<form method="POST" action="admin-password">
+		<div class="form-group">
+			<label for="new-password">New password</label>
+			<input class="form-control" type="password" name="new-password" id="new-password" required>
+		</div>
+		<div class="form-group">
+			<label for="confirm-password">Confirm password</label>
+			<input class="form-control" type="password" name="confirm-password" id="confirm-password" required>
+		</div>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "nickel-club"
+version = "0.1.0"
+description = ""
+authors = ["James Sully <sullyj3@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Flask = "^2.0.3"
+click = "^8.0.4"
+Flask-SQLAlchemy = "^2.5.1"
+psycopg2-binary = "^2.9.3"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
