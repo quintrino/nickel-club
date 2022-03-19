@@ -11,19 +11,20 @@
 			color: darkblue;
 		}
 
-		.header {
-			margin-bottom: 8px;
-		}
-    </style>
+		</style>
 		{% block pagestyle %}{% endblock %}
-  </head>
-  <body>
-		<nav>
-			<!-- TODO this should link to nickel index not admin index -->
-			<h1><a href="{{ url_for('admin.index') }}">Nickel Club</a></h1>
-			{% if g.admin %}
-			<div><a href="{{ url_for('admin.logout') }}">Log Out</a></div>
-			{% endif %}
+	</head>
+	<body>
+		<nav class="navbar navbar-light bg-light">
+			<div class="container-fluid">
+				<!-- TODO this should link to nickel index not admin index -->
+				<a class="navbar-brand" href="{{ url_for('admin.index') }}">Nickel Club</a>
+				{% if g.admin %}
+				<div class="nav-item">
+					<div><a href="{{ url_for('admin.logout') }}">Log Out</a></div>
+				</div>
+				{% endif %}
+			</div>
 		</nav>
 		<section class="content">
 			<header class="header">

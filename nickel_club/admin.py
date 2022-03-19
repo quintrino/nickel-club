@@ -65,18 +65,24 @@ def logout():
     return redirect(url_for("admin.login"))
 
 
-@bp.route("/index", methods=("GET", "POST"))
+@bp.route("/index", methods=("GET",))
 @admin_required
 def index():
-    members = ClubMember.query.all()
-    if request.method == "GET":
-        return render_template("admin/index.html", members=members)
-    elif request.method == "POST":
-        for member in members:
-            member.nickels = request.form[f'{member.id}-nickels']
-        db.session.commit()
-        flash("Updated members nickels")
-        return render_template("admin/index.html", members=members)
+    members = ClubMember.query.order_by(ClubMember.id).all()
+    return render_template("admin/index.html", members=members)
+
+
+@bp.route("/members/<int:member_id>", methods=("POST",))
+@admin_required
+def member(member_id):
+    member = ClubMember.query.filter_by(id=member_id).first()
+    if 'nickels' not in request.form:
+        abort(400)
+    member.nickels = request.form['nickels']
+    db.session.commit()
+    flash(f"Set {member.name}'s nickels to {member.nickels}") 
+    return redirect(url_for("admin.index"))
+
 
 @bp.route("/admin-password", methods=("POST",))
 @admin_required
@@ -91,3 +97,5 @@ def admin_password():
         flash("The passwords do not match.")
 
     return redirect(url_for("admin.index"))
+
+bp.add_url_rule("/", endpoint="index")
