@@ -11,6 +11,10 @@
 			color: darkblue;
 		}
 
+		#logo {
+			height: 35px;
+		}
+
 		</style>
 		{% block pagestyle %}{% endblock %}
 	</head>
@@ -18,7 +22,13 @@
 		<nav class="navbar navbar-light bg-light">
 			<div class="container-fluid">
 				<!-- TODO this should link to nickel index not admin index -->
-				<a class="navbar-brand" href="{{ url_for('admin.index') }}">Nickel Club</a>
+				<a class="navbar-brand" href="{{ url_for('about.index') }}">
+					<img id="logo" src="{{ url_for('static', filename='images/logo_placeholder.png') }}">
+					Nickel Club
+				</a>
+				<div class="nav-item">
+					<div><a href="{{ url_for('admin.index') }}">Admin</a></div>
+				</div>
 				{% if g.admin %}
 				<div class="nav-item">
 					<div><a href="{{ url_for('admin.logout') }}">Log Out</a></div>
