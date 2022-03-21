@@ -25,8 +25,6 @@ def create_app(test_config=None):
         # load the test config if passed in
         app.config.update(test_config)
 
-    print("database url:", app.config["SQLALCHEMY_DATABASE_URI"])
-
     from nickel_club import model
     model.init_app(app)
 
