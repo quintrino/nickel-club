@@ -18,11 +18,14 @@ def create_app(test_config=None):
     if test_config is None:
         app.config.from_mapping({
             "SECRET_KEY": os.getenv("SECRET_KEY"),
-            "SQLALCHEMY_DATABASE_URI": os.getenv("DATABASE_URL")
+            "SQLALCHEMY_DATABASE_URI": os.getenv("DATABASE_URL")\
+                    .replace("postgres://", "postgresql://", 1)
         })
     else:
         # load the test config if passed in
         app.config.update(test_config)
+
+    print("database url:", app.config["SQLALCHEMY_DATABASE_URI"])
 
     from nickel_club import model
     model.init_app(app)
