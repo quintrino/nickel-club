@@ -19,7 +19,8 @@ def create_app(test_config=None):
         app.config.from_mapping({
             "SECRET_KEY": os.getenv("SECRET_KEY"),
             "SQLALCHEMY_DATABASE_URI": os.getenv("DATABASE_URL")\
-                    .replace("postgres://", "postgresql://", 1)
+                    .replace("postgres://", "postgresql://", 1),
+            "SQLALCHEMY_TRACK_MODIFICATIONS": False
         })
     else:
         # load the test config if passed in
