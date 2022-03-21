@@ -6,25 +6,28 @@ from werkzeug.security import generate_password_hash
 
 db = SQLAlchemy()
 
+
 class ClubMember(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     nickels = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
-        return '<ClubMember %r>' % self.name
+        return "<ClubMember %r>" % self.name
+
 
 class AdminUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(200), nullable=False)
 
     def __repr__(self):
-        return '<AdminUser %r>' % self.username
+        return "<AdminUser %r>" % self.username
 
 
 def init_db():
     """Clear existing data and create new tables."""
     db.create_all()
+
 
 @click.command("init-db")
 @with_appcontext
@@ -32,6 +35,7 @@ def init_db_command():
     """Clear existing data and create new tables."""
     init_db()
     click.echo("Initialized the database.")
+
 
 def set_admin_password(password):
     hashed = generate_password_hash(password)
@@ -52,6 +56,7 @@ def set_admin_password(password):
 def set_admin_password_command(password):
     set_admin_password(password)
     click.echo(f"Updated admin password")
+
 
 def init_app(app):
     """Register database functions with the Flask app. This is called by

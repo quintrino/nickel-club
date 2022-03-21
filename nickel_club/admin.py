@@ -16,6 +16,7 @@ from nickel_club.model import AdminUser, ClubMember, db, set_admin_password
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
 
+
 def admin_required(view):
     """View decorator that redirects anonymous users to the admin login page."""
 
@@ -28,6 +29,7 @@ def admin_required(view):
 
     return wrapped_view
 
+
 @bp.before_app_request
 def load_logged_in_admin():
     admin_id = session.get("admin_id")
@@ -36,6 +38,7 @@ def load_logged_in_admin():
         g.admin = None
     else:
         g.admin = AdminUser.query.filter_by(id=admin_id).first()
+
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
@@ -58,6 +61,7 @@ def login():
         flash(error)
     return render_template("admin/login.html")
 
+
 @bp.route("/logout")
 def logout():
     """Clear the current session, including the stored user id."""
@@ -76,11 +80,11 @@ def index():
 @admin_required
 def member(member_id):
     member = ClubMember.query.filter_by(id=member_id).first()
-    if 'nickels' not in request.form:
+    if "nickels" not in request.form:
         abort(400)
-    member.nickels = request.form['nickels']
+    member.nickels = request.form["nickels"]
     db.session.commit()
-    flash(f"Set {member.name}'s nickels to {member.nickels}") 
+    flash(f"Set {member.name}'s nickels to {member.nickels}")
     return redirect(url_for("admin.index"))
 
 
@@ -97,5 +101,6 @@ def admin_password():
         flash("The passwords do not match.")
 
     return redirect(url_for("admin.index"))
+
 
 bp.add_url_rule("/", endpoint="index")

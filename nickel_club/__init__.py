@@ -1,4 +1,4 @@
-__version__ = '0.1.0'
+__version__ = "0.1.0"
 
 import os
 
@@ -6,7 +6,7 @@ from flask import Flask
 from dotenv import load_dotenv
 
 # Load environment variables from .env file, if it exists.
-# Does not override existing env variables. In this way, we can store dev 
+# Does not override existing env variables. In this way, we can store dev
 # configuration in a .env file that is not committed, while configuring on heroku using regular env variables
 load_dotenv()
 
@@ -16,23 +16,26 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
     if test_config is None:
-        app.config.from_mapping({
-            "SECRET_KEY": os.getenv("SECRET_KEY"),
-            "SQLALCHEMY_DATABASE_URI": os.getenv("DATABASE_URL")\
-                    .replace("postgres://", "postgresql://", 1),
-            "SQLALCHEMY_TRACK_MODIFICATIONS": False
-        })
+        app.config.from_mapping(
+            {
+                "SECRET_KEY": os.getenv("SECRET_KEY"),
+                "SQLALCHEMY_DATABASE_URI": os.getenv("DATABASE_URL").replace(
+                    "postgres://", "postgresql://", 1
+                ),
+                "SQLALCHEMY_TRACK_MODIFICATIONS": False,
+            }
+        )
     else:
         # load the test config if passed in
         app.config.update(test_config)
 
     from nickel_club import model
+    from nickel_club import admin
+    from nickel_club import about
+
     model.init_app(app)
 
-    from nickel_club import admin
     app.register_blueprint(admin.bp)
-
-    from nickel_club import about
     app.register_blueprint(about.bp)
 
     app.add_url_rule("/", endpoint="about.index")
