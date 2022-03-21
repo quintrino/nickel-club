@@ -21,7 +21,7 @@ FLASK_ENV=development
 ```
 3. `poetry install`
 4. `poetry shell`
-5. `flask init-db`
+5. `flask init-db` (this creates the tables)
 6. `flask run`
 
 ### Once you're already set up
