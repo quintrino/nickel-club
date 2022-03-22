@@ -87,6 +87,17 @@ def member(member_id):
     flash(f"Set {member.name}'s nickels to {member.nickels}")
     return redirect(url_for("admin.index"))
 
+@bp.route("/createmember", methods=["POST"])
+@admin_required
+def create_member():
+    member = ClubMember(
+        name = request.form["name"],
+        nickels = request.form.get("nickels") or 0
+    )
+    db.session.add(member)
+    db.session.commit()
+    return redirect(url_for("admin.index"))
+
 
 @bp.route("/admin-password", methods=("POST",))
 @admin_required

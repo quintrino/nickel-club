@@ -38,6 +38,17 @@
 			{% endfor %}
 		</tbody>
 	</table>
+
+	<div>
+		<h4>Add new club member</h3>
+		<form action="{{ url_for('admin.create_member') }}" method="POST">
+			<label for="name">Name</label>
+			<input name="name" required>
+			<label for="nickels">Nickels</label>
+			<input name="nickels" type="number" value="0">
+			<button type="submit" class="btn btn-primary">Add</button>
+		</form>
+	</div>
 </div>
 
 <div>
