@@ -25,5 +25,4 @@ FLASK_ENV=development
 6. `flask run`
 
 ### Once you're already set up
-1. `poetry shell`
-2. `flask run`
+1. `poetry run flask run`
