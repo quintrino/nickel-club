@@ -31,13 +31,13 @@ def create_app(test_config=None):
 
     from nickel_club import model
     from nickel_club import admin
-    from nickel_club import about
+    from nickel_club import public
 
     model.init_app(app)
 
     app.register_blueprint(admin.bp)
-    app.register_blueprint(about.bp)
+    app.register_blueprint(public.bp)
 
-    app.add_url_rule("/", endpoint="about.index")
+    app.add_url_rule("/", endpoint="public.about")
 
     return app
