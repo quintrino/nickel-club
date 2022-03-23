@@ -26,6 +26,9 @@
 					Nickel Club
 				</a>
 				<div class="nav-item">
+					<div><a href="{{ url_for('public.leaderboard') }}">Leaderboard</a></div>
+				</div>
+				<div class="nav-item">
 					<div><a href="{{ url_for('admin.index') }}">Admin</a></div>
 				</div>
 				{% if g.admin %}
