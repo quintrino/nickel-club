@@ -13,5 +13,5 @@ def about():
 def member(member_id):
     member = ClubMember.query.filter_by(id=member_id).first()
     if member is None:
-        abort(400)
+        abort(404)
     return render_template("public/member.html", member=member)
