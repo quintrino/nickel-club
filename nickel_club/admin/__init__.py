@@ -14,8 +14,7 @@ from sqlalchemy import exc
 
 from nickel_club.model import AdminUser, ClubMember, db, set_admin_password
 
-bp = Blueprint("admin", __name__, url_prefix="/admin")
-
+bp = Blueprint("admin", __name__, url_prefix="/admin", template_folder="templates")
 
 def admin_required(view):
     """View decorator that redirects anonymous users to the admin login page."""
