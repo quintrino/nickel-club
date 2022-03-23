@@ -11,7 +11,5 @@ def about():
 
 @bp.route("/member/<int:member_id>", methods=["GET"])
 def member(member_id):
-    member = ClubMember.query.filter_by(id=member_id).first()
-    if member is None:
-        abort(404)
+    member = ClubMember.query.get_or_404(member_id)
     return render_template("public/member.html", member=member)

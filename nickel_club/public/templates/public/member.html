@@ -7,5 +7,32 @@
 {% block content %}
 <h2>Current balance:</h2>
 <p>{{ member.nickels}}</p>
+
+<h1>TODO</h1>
+
+<h2>Nickel requests</h2>
+<form method="post">
+  <fieldset disabled>
+    <legend>Request nickels</legend>
+    <label for="amount">Amount</label>
+    <input type="number" name="amount" required>
+		<br>
+    <label for="Reason">Reason</label>
+		<input type="text" name="reason">
+    <input type="submit">
+  </fieldset>
+</form>
+
+<form method="post">
+  <fieldset disabled>
+    <legend>Spend nickels</legend>
+    <label for="amount">Amount</label>
+    <input type="number" name="amount" required>
+		<br>
+    <label for="Reason">Reason</label>
+		<input type="text" name="reason">
+    <input type="submit">
+  </fieldset>
+</form>
 {% endblock %}
 
