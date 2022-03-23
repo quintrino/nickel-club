@@ -80,8 +80,6 @@ def index():
 @admin_required
 def member(member_id):
     member = ClubMember.query.filter_by(id=member_id).first()
-    if "nickels" not in request.form:
-        abort(400)
     member.nickels = request.form["nickels"]
     db.session.commit()
     flash(f"Set {member.name}'s nickels to {member.nickels}")
