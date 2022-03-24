@@ -13,6 +13,7 @@ class ClubMember(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     nickels = db.Column(db.Integer, nullable=False)
+    requests = db.relationship('NickelRequest', backref='club_member', lazy=True)
 
     def __repr__(self):
         return "<ClubMember %r>" % self.name
@@ -33,9 +34,10 @@ class NickelRequestType(Enum):
 
 class NickelRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    type = db.Column(db.Enum(NickelRequestType), nullable=False)
+    request_type = db.Column(db.Enum(NickelRequestType), nullable=False)
     amount = db.Column(db.Integer, nullable=False)
     reason = db.Column(db.UnicodeText)
+    member_id = db.Column(db.Integer, db.ForeignKey('club_member.id'), nullable=False)
 
 
 def init_db():
