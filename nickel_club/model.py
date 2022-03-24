@@ -1,3 +1,5 @@
+from enum import Enum
+
 import click
 from flask import g
 from flask.cli import with_appcontext
@@ -22,6 +24,18 @@ class AdminUser(db.Model):
 
     def __repr__(self):
         return "<AdminUser %r>" % self.username
+
+
+class NickelRequestType(Enum):
+    debit = 1
+    credit = 2
+
+
+class NickelRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.Enum(NickelRequestType), nullable=False)
+    amount = db.Column(db.Integer, nullable=False)
+    reason = db.Column(db.UnicodeText)
 
 
 def init_db():
