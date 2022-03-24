@@ -24,7 +24,7 @@ class AdminUser(db.Model):
     password = db.Column(db.String(200), nullable=False)
 
     def __repr__(self):
-        return "<AdminUser %r>" % self.username
+        return "<AdminUser %r>" % self.id
 
 
 class NickelRequestType(Enum):
