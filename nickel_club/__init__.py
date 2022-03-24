@@ -4,6 +4,7 @@ import os
 
 from flask import Flask
 from dotenv import load_dotenv
+from flaskext.markdown import Markdown
 
 # Load environment variables from .env file, if it exists.
 # Does not override existing env variables. In this way, we can store dev
@@ -39,5 +40,7 @@ def create_app(test_config=None):
     app.register_blueprint(public.bp)
 
     app.add_url_rule("/", endpoint="public.about")
+
+    Markdown(app)
 
     return app
