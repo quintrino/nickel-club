@@ -19,19 +19,16 @@ def member(member_id):
 
 @bp.route("/member/<int:member_id>/nickel-request", methods=["POST"])
 def nickel_request(member_id):
-    # todo: might be nicer to add a from string contructor to the Enum class
-    match request.form["request_type"]:
-        case "credit":
-            request_type = NickelRequestType.credit
-        case "debit":
-            request_type = NickelRequestType.debit
-        case _:
-            abort(400)
+    request_type_str = request.form["request_type"]
+    try:
+        request_type = NickelRequestType[request_type_str],
+    except KeyError:
+        abort(400)
 
     nickel_request = NickelRequest(
         amount = request.form["amount"],
         reason = request.form["reason"],
-        request_type = request_type,
+        request_type = NickelRequestType[request.form["request_type"]],
         member_id = member_id
     )
     db.session.add(nickel_request)
