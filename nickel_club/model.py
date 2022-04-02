@@ -39,6 +39,13 @@ class NickelRequest(db.Model):
     reason = db.Column(db.UnicodeText)
     member_id = db.Column(db.Integer, db.ForeignKey('club_member.id'), nullable=False)
 
+    def explain(self):
+        match self.request_type:
+            case NickelRequestType.debit:
+                return f"{self.club_member.name} asked for {self.amount} nickels."
+            case NickelRequestType.credit:
+                return f"{self.club_member.name} wants to spend {self.amount} nickels."
+
 
 def init_db():
     """Clear existing data and create new tables."""

@@ -91,8 +91,8 @@ def get_paginated_requests(page=1) -> Pagination:
 @admin_required
 def requests(page):
     nickel_requests = get_paginated_requests(page)
-    ret = nickel_requests.items
-    return(str([ x.id for x in ret]))
+    return render_template("admin/nickel_requests.html", nickel_requests=nickel_requests)
+
 
 @bp.route("/members/<int:member_id>", methods=("POST",))
 @admin_required
@@ -102,6 +102,7 @@ def member(member_id):
     db.session.commit()
     flash(f"Set {member.name}'s nickels to {member.nickels}")
     return redirect(url_for("admin.index"))
+
 
 @bp.route("/createmember", methods=["POST"])
 @admin_required
