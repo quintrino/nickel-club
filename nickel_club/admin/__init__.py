@@ -78,7 +78,7 @@ def index():
 
 
 REQUESTS_PER_PAGE = 30
-def get_paginated_requests(page=1):
+def get_paginated_requests(page=1) -> Pagination:
     nickel_requests = NickelRequest.query.order_by(
         # Proxy for most recent without getting dates involved
         NickelRequest.id.desc() 
