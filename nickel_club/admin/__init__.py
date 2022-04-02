@@ -10,9 +10,11 @@ from flask import url_for
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
+from flask_sqlalchemy import Pagination
 from sqlalchemy import exc
 
-from nickel_club.model import AdminUser, ClubMember, db, set_admin_password
+from nickel_club.model import AdminUser, ClubMember, NickelRequest, NickelRequestType
+from nickel_club.model import db, set_admin_password
 
 bp = Blueprint("admin", __name__, url_prefix="/admin", template_folder="templates")
 
@@ -74,6 +76,23 @@ def index():
     members = ClubMember.query.order_by(ClubMember.id).all()
     return render_template("admin/index.html", members=members)
 
+
+REQUESTS_PER_PAGE = 30
+def get_paginated_requests(page=1):
+    nickel_requests = NickelRequest.query.order_by(
+        # Proxy for most recent without getting dates involved
+        NickelRequest.id.desc() 
+    ).paginate(page=page, per_page=REQUESTS_PER_PAGE)
+
+    return nickel_requests
+
+
+@bp.route("/requests/page/<int:page>", methods=("GET",))
+@admin_required
+def requests(page):
+    nickel_requests = get_paginated_requests(page)
+    ret = nickel_requests.items
+    return(str([ x.id for x in ret]))
 
 @bp.route("/members/<int:member_id>", methods=("POST",))
 @admin_required
