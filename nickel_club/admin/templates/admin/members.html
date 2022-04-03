@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'admin/admin.html' %}
 
 {% block header %}
 <h1>{% block title %}Admin{% endblock %}</h1>
@@ -12,23 +12,6 @@
 </style>
 {% endblock %}
 
-{% block navbar %}
-{{ super() }}
-<nav class="navbar">
-	<div class="container-fluid">
-		<div class="nav-item">
-			<div><a href="{{ url_for('admin.members') }}">Members</a></div>
-		</div>
-		<div class="nav-item">
-			<div><a href="{{ url_for('admin.requests') }}">Requests</a></div>
-		</div>
-		<div class="nav-item">
-			<div><a href="{{ url_for('admin.settings') }}">Settings</a></div>
-		</div>
-	</div>
-</nav>
-
-{% endblock %}
 
 {% block content %}
 <div>
