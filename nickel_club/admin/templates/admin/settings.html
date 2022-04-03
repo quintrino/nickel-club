@@ -1,0 +1,22 @@
+{% extends 'admin/admin.html' %}
+
+{% block header %}
+<h1>{% block title %}Admin - Settings{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+<h3>Change admin password</h3>
+<form method="POST" action="{{ url_for('admin.admin_password') }}">
+	<div class="mb-2">
+		<label for="new-password">New password</label>
+		<input class="form-control" type="password" name="new-password" id="new-password" required>
+	</div>
+	<div class="mb-2">
+		<label for="confirm-password">Confirm password</label>
+		<input class="form-control" type="password" name="confirm-password" id="confirm-password" required>
+	</div>
+	<button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}

@@ -120,7 +120,7 @@ def create_member():
 @bp.route("/settings")
 @admin_required
 def settings():
-    raise NotImplementedError
+    return render_template("admin/settings.html")
 
 
 @bp.route("/admin-password", methods=("POST",))
@@ -135,8 +135,7 @@ def admin_password():
     else:
         flash("The passwords do not match.")
 
-    # TODO move password form to separate settings page and redirect there
-    return redirect(url_for("admin.members"))
+    return redirect(url_for("admin.settings"))
 
 
 bp.add_url_rule("/", endpoint="members")
