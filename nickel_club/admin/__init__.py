@@ -75,7 +75,7 @@ def logout():
 @admin_required
 def members():
     members = ClubMember.query.order_by(ClubMember.id).all()
-    return render_template("admin/index.html", members=members)
+    return render_template("admin/members.html", members=members)
 
 
 REQUESTS_PER_PAGE = 30
