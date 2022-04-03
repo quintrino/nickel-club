@@ -57,7 +57,8 @@ def login():
         if error is None:
             session.clear()
             session["admin_id"] = admin.id
-            return redirect(url_for("admin.index"))
+            # TODO redirect to previous destination
+            return redirect(url_for("admin.members"))
 
         flash(error)
     return render_template("admin/login.html")
@@ -70,9 +71,9 @@ def logout():
     return redirect(url_for("admin.login"))
 
 
-@bp.route("/index", methods=("GET",))
+@bp.route("/members", methods=("GET",))
 @admin_required
-def index():
+def members():
     members = ClubMember.query.order_by(ClubMember.id).all()
     return render_template("admin/index.html", members=members)
 
@@ -93,6 +94,7 @@ def requests(page):
     nickel_requests = get_paginated_requests(page)
     return render_template("admin/nickel_requests.html", nickel_requests=nickel_requests)
 
+bp.add_url_rule("/requests", endpoint="requests", defaults={'page': 1})
 
 @bp.route("/members/<int:member_id>", methods=("POST",))
 @admin_required
@@ -101,7 +103,7 @@ def member(member_id):
     member.nickels = request.form["nickels"]
     db.session.commit()
     flash(f"Set {member.name}'s nickels to {member.nickels}")
-    return redirect(url_for("admin.index"))
+    return redirect(url_for("admin.members"))
 
 
 @bp.route("/createmember", methods=["POST"])
@@ -113,7 +115,12 @@ def create_member():
     )
     db.session.add(member)
     db.session.commit()
-    return redirect(url_for("admin.index"))
+    return redirect(url_for("admin.members"))
+
+@bp.route("/settings")
+@admin_required
+def settings():
+    raise NotImplementedError
 
 
 @bp.route("/admin-password", methods=("POST",))
@@ -128,7 +135,8 @@ def admin_password():
     else:
         flash("The passwords do not match.")
 
-    return redirect(url_for("admin.index"))
+    # TODO move password form to separate settings page and redirect there
+    return redirect(url_for("admin.members"))
 
 
-bp.add_url_rule("/", endpoint="index")
+bp.add_url_rule("/", endpoint="members")

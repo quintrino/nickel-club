@@ -19,6 +19,7 @@
 		{% block pagestyle %}{% endblock %}
 	</head>
 	<body>
+		{% block navbar %}
 		<nav class="navbar navbar-light bg-light">
 			<div class="container-fluid">
 				<a class="navbar-brand" href="{{ url_for('public.about') }}">
@@ -29,7 +30,7 @@
 					<div><a href="{{ url_for('public.leaderboard') }}">Leaderboard</a></div>
 				</div>
 				<div class="nav-item">
-					<div><a href="{{ url_for('admin.index') }}">Admin</a></div>
+					<div><a href="{{ url_for('admin.members') }}">Admin</a></div>
 				</div>
 				{% if g.admin %}
 				<div class="nav-item">
@@ -38,6 +39,7 @@
 				{% endif %}
 			</div>
 		</nav>
+		{% endblock %}
 		<section class="content">
 			<header class="header">
 				{% block header %}{% endblock %}
