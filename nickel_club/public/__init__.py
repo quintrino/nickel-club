@@ -23,12 +23,15 @@ def about():
 
 @bp.route("/member/<int:member_id>", methods=["GET"])
 def member(member_id):
-    member = ClubMember.query.get_or_404(member_id)
+    member = ClubMember.get_not_deleted_or_404(member_id)
     return render_template("public/member.html", member=member)
 
 
 @bp.route("/member/<int:member_id>/nickel-request", methods=["POST"])
 def nickel_request(member_id):
+    # ensure the member exists and is not deleted
+    member = ClubMember.get_not_deleted_or_404(member_id)
+
     request_type_str = request.form["request_type"]
     try:
         request_type = (NickelRequestType[request_type_str],)
@@ -49,5 +52,5 @@ def nickel_request(member_id):
 
 @bp.route("/leaderboard", methods=["GET"])
 def leaderboard():
-    members = ClubMember.query.order_by(ClubMember.nickels.desc()).all()
+    members = ClubMember.not_deleted().order_by(ClubMember.nickels.desc()).all()
     return render_template("public/leaderboard.html", members=members)

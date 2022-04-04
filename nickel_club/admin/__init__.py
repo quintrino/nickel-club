@@ -75,7 +75,7 @@ def logout():
 @bp.route("/members", methods=("GET",))
 @admin_required
 def members():
-    members = ClubMember.query.order_by(ClubMember.id).all()
+    members = ClubMember.not_deleted().order_by(ClubMember.id).all()
     return render_template("admin/members.html", members=members)
 
 
@@ -83,7 +83,7 @@ REQUESTS_PER_PAGE = 30
 
 
 def get_paginated_requests(page=1) -> Pagination:
-    nickel_requests = NickelRequest.query.order_by(
+    nickel_requests = NickelRequest.member_not_deleted().order_by(
         # Proxy for most recent without getting dates involved
         NickelRequest.id.desc()
     ).paginate(page=page, per_page=REQUESTS_PER_PAGE)
@@ -104,11 +104,12 @@ def requests():
 @bp.route("/deletemember/<int:member_id>")
 @admin_required
 def delete_member(member_id):
-    member = ClubMember.query.filter_by(id=member_id).first()
+    member = ClubMember.get_not_deleted_or_404(member_id)
+
     member.deleted = True
     db.session.commit()
     flash(
-        f"Removed {member.name} from Nickel Club. (Reset the deleted flag in the db to restore)"
+        f"Removed {member.name} from Nickel Club. (Reset the deleted flag in the db to restore them)"
     )
     return redirect(url_for("admin.members"))
 
@@ -116,7 +117,8 @@ def delete_member(member_id):
 @bp.route("/members/<int:member_id>", methods=("POST",))
 @admin_required
 def member(member_id):
-    member = ClubMember.query.filter_by(id=member_id).first()
+    member = ClubMember.get_not_deleted_or_404(member_id)
+
     member.nickels = request.form["nickels"]
     db.session.commit()
     flash(f"Set {member.name}'s nickels to {member.nickels}")

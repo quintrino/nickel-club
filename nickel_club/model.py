@@ -1,7 +1,10 @@
 from enum import Enum
 
 import click
-from flask import g
+from flask import (
+    g,
+    abort,
+)
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
@@ -24,6 +27,17 @@ class ClubMember(db.Model):
     def __repr__(self):
         return "<ClubMember %r>" % self.name
 
+    @staticmethod
+    def not_deleted():
+        return ClubMember.query.filter_by(deleted=False)
+
+    @staticmethod 
+    def get_not_deleted_or_404(member_id):
+        member = ClubMember.query.get_or_404(member_id)
+        if member.deleted:
+            abort(404)
+
+        return member
 
 class AdminUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -44,6 +58,10 @@ class NickelRequest(db.Model):
     amount = db.Column(db.Integer, nullable=False)
     reason = db.Column(db.UnicodeText)
     member_id = db.Column(db.Integer, db.ForeignKey("club_member.id"), nullable=False)
+
+    @staticmethod
+    def member_not_deleted():
+        return NickelRequest.query.filter(NickelRequest.club_member.has(deleted=False))
 
     def explain(self):
         match self.request_type:
