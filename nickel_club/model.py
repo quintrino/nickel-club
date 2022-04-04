@@ -10,11 +10,14 @@ from flask_migrate import Migrate
 db = SQLAlchemy()
 migrate = Migrate()
 
+
 class ClubMember(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     nickels = db.Column(db.Integer, nullable=False)
-    deleted = db.Column(db.Boolean, nullable=False, default=False, server_default='false')
+    deleted = db.Column(
+        db.Boolean, nullable=False, default=False, server_default="false"
+    )
 
     requests = db.relationship("NickelRequest", backref="club_member", lazy=False)
 
@@ -82,4 +85,3 @@ def init_app(app):
 
     # add click commands for database operations
     app.cli.add_command(set_admin_password_command)
-

@@ -101,6 +101,18 @@ def requests():
     )
 
 
+@bp.route("/deletemember/<int:member_id>")
+@admin_required
+def delete_member(member_id):
+    member = ClubMember.query.filter_by(id=member_id).first()
+    member.deleted = True
+    db.session.commit()
+    flash(
+        f"Removed {member.name} from Nickel Club. (Reset the deleted flag in the db to restore)"
+    )
+    return redirect(url_for("admin.members"))
+
+
 @bp.route("/members/<int:member_id>", methods=("POST",))
 @admin_required
 def member(member_id):

@@ -30,6 +30,9 @@
 					<input name="nickels" type="number" value="{{member.nickels}}" required>
 					<button type="submit" class="btn btn-primary">Set</button>
 				</form>
+				<form action="{{ url_for('admin.delete_member', member_id=member.id) }}" method="GET">
+					<button type="submit" class="btn btn-danger">Delete</button>
+				</form>
 			</td>
 		</tr>
 		{% else %}
