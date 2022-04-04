@@ -5,15 +5,18 @@ from flask import g
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
-
+migrate = Migrate()
 
 class ClubMember(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
     nickels = db.Column(db.Integer, nullable=False)
-    requests = db.relationship("NickelRequest", backref="club_member", lazy=True)
+    deleted = db.Column(db.Boolean, nullable=False, default=False, server_default='false')
+
+    requests = db.relationship("NickelRequest", backref="club_member", lazy=False)
 
     def __repr__(self):
         return "<ClubMember %r>" % self.name
@@ -47,19 +50,6 @@ class NickelRequest(db.Model):
                 return f"{self.club_member.name} wants to spend {self.amount} nickels."
 
 
-def init_db():
-    """Clear existing data and create new tables."""
-    db.create_all()
-
-
-@click.command("init-db")
-@with_appcontext
-def init_db_command():
-    """Clear existing data and create new tables."""
-    init_db()
-    click.echo("Initialized the database.")
-
-
 def set_admin_password(password):
     hashed = generate_password_hash(password)
 
@@ -85,6 +75,11 @@ def init_app(app):
     """Register database functions with the Flask app. This is called by
     the application factory.
     """
+    # register app with flask-sqlalchemy
     db.init_app(app)
-    app.cli.add_command(init_db_command)
+    # register app with flask-migrate
+    migrate.init_app(app, db)
+
+    # add click commands for database operations
     app.cli.add_command(set_admin_password_command)
+

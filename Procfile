@@ -1,2 +1,2 @@
 web: gunicorn --bind 0.0.0.0:${PORT} "nickel_club:create_app()"
-init: flask init-db
+release: flask db upgrade
