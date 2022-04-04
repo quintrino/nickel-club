@@ -1,12 +1,16 @@
 import functools
-from flask import Blueprint
-from flask import flash
-from flask import g
-from flask import redirect
-from flask import render_template
-from flask import request
-from flask import session
-from flask import url_for
+from flask import (
+    current_app,
+    Blueprint,
+    flash,
+    g,
+    abort,
+    redirect,
+    render_template,
+    request,
+    session,
+    url_for,
+)
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
@@ -117,11 +121,26 @@ def delete_member(member_id):
 @bp.route("/members/<int:member_id>", methods=("POST",))
 @admin_required
 def member(member_id):
-    member = ClubMember.get_not_deleted_or_404(member_id)
+    '''Allow updating both name and nickel balance of members'''
 
-    member.nickels = request.form["nickels"]
+    member = ClubMember.get_not_deleted_or_404(member_id)
+    if "nickels" not in request.form and "name" not in request.form:
+        abort(400)
+
+    try:
+        member.nickels = request.form["nickels"]
+        flash(f"Set {member.name}'s nickels to {member.nickels}")
+    except KeyError:
+        pass
+
+    try:
+        old_name = member.name
+        member.name = request.form["name"]
+        flash(f"Renamed {old_name} nickels to {member.name}")
+    except KeyError:
+        pass
+
     db.session.commit()
-    flash(f"Set {member.name}'s nickels to {member.nickels}")
     return redirect(url_for("admin.members"))
 
 
