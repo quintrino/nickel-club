@@ -21,7 +21,29 @@
 	{% endfor %}
 </div>
 
-<div>
-	<p>TODO: page buttons</p>
-</div>
+<nav class="mt-2">
+	<ul class="pagination">
+		<li class="page-item 
+							 {% if nickel_requests.page == 1 %} disabled {% endif %}
+							 ">
+			<a class="page-link" href="{{ url_for('admin.requests', page=nickel_requests.prev_num) }}" aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+			</a>
+		</li>
+		{% for page_num in nickel_requests.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+		<li class="page-item
+							 {% if page_num == nickel_requests.page %} active {% endif %}
+							 ">
+			<a class="page-link" href="{{ url_for('admin.requests', page=page_num) }}"> {{page_num}} </a>
+		</li>
+		{% endfor %}
+		<li class="page-item
+							 {% if nickel_requests.page == nickel_requests.pages %} disabled {% endif %}
+			">
+			<a class="page-link" href="{{ url_for('admin.requests', page=nickel_requests.next_num) }}" aria-label="Next">
+				<span aria-hidden="true">&raquo;</span>
+			</a>
+		</li>
+	</ul>
+</nav>
 {% endblock %}

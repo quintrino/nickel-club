@@ -88,13 +88,14 @@ def get_paginated_requests(page=1) -> Pagination:
     return nickel_requests
 
 
-@bp.route("/requests/page/<int:page>", methods=("GET",))
+@bp.route("/requests", methods=("GET",))
 @admin_required
-def requests(page):
+def requests():
+    page = request.args.get('page', 1, type=int)
+    print(page)
     nickel_requests = get_paginated_requests(page)
     return render_template("admin/nickel_requests.html", nickel_requests=nickel_requests)
 
-bp.add_url_rule("/requests", endpoint="requests", defaults={'page': 1})
 
 @bp.route("/members/<int:member_id>", methods=("POST",))
 @admin_required
