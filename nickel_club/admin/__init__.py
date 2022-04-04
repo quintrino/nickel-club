@@ -136,7 +136,7 @@ def member(member_id):
     try:
         old_name = member.name
         member.name = request.form["name"]
-        flash(f"Renamed {old_name} nickels to {member.name}")
+        flash(f"Renamed {old_name} to {member.name}")
     except KeyError:
         pass
 
