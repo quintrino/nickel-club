@@ -92,7 +92,6 @@ def get_paginated_requests(page=1) -> Pagination:
 @admin_required
 def requests():
     page = request.args.get('page', 1, type=int)
-    print(page)
     nickel_requests = get_paginated_requests(page)
     return render_template("admin/nickel_requests.html", nickel_requests=nickel_requests)
 
