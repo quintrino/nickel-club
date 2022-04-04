@@ -118,7 +118,7 @@ def delete_member(member_id):
     return redirect(url_for("admin.members"))
 
 
-@bp.route("/members/<int:member_id>", methods=("POST",))
+@bp.route("/member/<int:member_id>", methods=("POST",))
 @admin_required
 def member(member_id):
     '''Allow updating both name and nickel balance of members'''
