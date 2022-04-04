@@ -18,6 +18,7 @@ from nickel_club.model import db, set_admin_password
 
 bp = Blueprint("admin", __name__, url_prefix="/admin", template_folder="templates")
 
+
 def admin_required(view):
     """View decorator that redirects anonymous users to the admin login page."""
 
@@ -79,10 +80,12 @@ def members():
 
 
 REQUESTS_PER_PAGE = 30
+
+
 def get_paginated_requests(page=1) -> Pagination:
     nickel_requests = NickelRequest.query.order_by(
         # Proxy for most recent without getting dates involved
-        NickelRequest.id.desc() 
+        NickelRequest.id.desc()
     ).paginate(page=page, per_page=REQUESTS_PER_PAGE)
 
     return nickel_requests
@@ -91,9 +94,11 @@ def get_paginated_requests(page=1) -> Pagination:
 @bp.route("/requests", methods=("GET",))
 @admin_required
 def requests():
-    page = request.args.get('page', 1, type=int)
+    page = request.args.get("page", 1, type=int)
     nickel_requests = get_paginated_requests(page)
-    return render_template("admin/nickel_requests.html", nickel_requests=nickel_requests)
+    return render_template(
+        "admin/nickel_requests.html", nickel_requests=nickel_requests
+    )
 
 
 @bp.route("/members/<int:member_id>", methods=("POST",))
@@ -110,12 +115,12 @@ def member(member_id):
 @admin_required
 def create_member():
     member = ClubMember(
-        name = request.form["name"],
-        nickels = request.form.get("nickels") or 0
+        name=request.form["name"], nickels=request.form.get("nickels") or 0
     )
     db.session.add(member)
     db.session.commit()
     return redirect(url_for("admin.members"))
+
 
 @bp.route("/settings")
 @admin_required
