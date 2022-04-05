@@ -3,26 +3,27 @@
 <h1>{% block title %}Admin - Members{% endblock %}</h1>
 {% endblock %}
 
-{% block pagestyle %}
-<style>
-.friends-table {
-	width: 100%;
-}
-</style>
-{% endblock %}
-
 
 {% block content %}
+<div class="d-grid gap-2 mb-3">
+  <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#addMember" aria-expanded="false" aria-controls="collapseExample">+ Add Member</button>
+</div>
 
-<div>
-	<h4>Add new club member</h3>
-	<form action="{{ url_for('admin.create_member') }}" method="POST">
-		<label for="name">Name</label>
-		<input name="name" required>
-		<label for="nickels">Nickels</label>
-		<input name="nickels" type="number" value="0">
-		<button type="submit" class="btn btn-primary">Add</button>
-	</form>
+<div class="collapse mb-3" id="addMember">
+	<div class="card card-body">
+		<legend>Add new club member</legend>
+		<form class="mb-0" action="{{ url_for('admin.create_member') }}" method="POST">
+			<div class="mb-2">
+				<label for="name" class="form-label">Name</label>
+				<input name="name" class="form-control" required>
+			</div>
+			<div class="mb-2">
+				<label for="nickels" class="form-label">Starting Nickel Balance</label>
+				<input name="nickels" class="form-control" type="number" value="0">
+			</div>
+			<button type="submit" class="btn btn-primary">Add</button>
+		</form>
+	</div>
 </div>
 
 
