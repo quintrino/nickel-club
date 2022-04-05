@@ -113,7 +113,7 @@ def delete_member(member_id):
     member.deleted = True
     db.session.commit()
     flash(
-        f"Removed {member.name} from Nickel Club. (Reset the deleted flag in the db to restore them)"
+        f"Removed {member.name} from Nickel Club."
     )
     return redirect(url_for("admin.members"))
 

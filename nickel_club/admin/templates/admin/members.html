@@ -52,11 +52,10 @@
 						<button type="submit" class="btn btn-outline-primary">Rename</button>
 					</div>
 				</form>
-				<form action="{{ url_for('admin.delete_member', member_id=member.id) }}" method="GET">
-					<div class="imput-group mb-3">
-						<button type="submit" class="btn btn-danger">Delete</button>
-					</div>
-				</form>
+
+				<div class="input-group mb-3">
+					<button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteMemberModal" data-url="{{ url_for('admin.delete_member', member_id=member.id) }}" data-member-name="{{member.name}}">Delete</button>
+				</div>
       </div>
     </div>
   </div>
@@ -65,4 +64,41 @@
 	{% endfor %}
 </div>
 
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteMemberModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div id="deleteMemberModalBody" class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<!-- the form action is set by the modal show button event listener below -->
+				<form action="#" id="deleteMemberModalForm">
+					<button type="submit" class="btn btn-danger">Delete</button>
+				</form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+	const delete_member_modal = document.querySelector('#deleteMemberModal');
+	delete_member_modal.addEventListener('show.bs.modal', (event) => {
+		// the button that triggers the modal contains data attributes that allow 
+		// us to populate the delete modal
+		const modal_trigger_button = event.relatedTarget;
+
+		const member_name = modal_trigger_button.getAttribute('data-member-name');
+		const msg = `Are you sure you want to delete ${member_name}? (You can undo by resetting the 'deleted' flag in the database)`
+
+		delete_member_modal.querySelector('#deleteMemberModalBody').innerHTML = msg;
+		const delete_form = delete_member_modal.querySelector('#deleteMemberModalForm');
+
+		delete_form.action = modal_trigger_button.getAttribute('data-url');
+	});
+</script>
 {% endblock %}
