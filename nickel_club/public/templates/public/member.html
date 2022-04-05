@@ -12,25 +12,25 @@
 
 <h2>Nickel requests</h2>
 <form method="post" action="{{ url_for('public.nickel_request', member_id=member.id) }}">
-	<legend>Request nickels</legend>
-	<label for="amount">Amount</label>
-	<input type="number" name="amount" required>
-	<br>
-	<label for="Reason">Reason</label>
-	<input type="text" name="reason">
-	<input type="text" name="request_type" value="debit" hidden readonly>
-	<input type="submit">
+  <legend>Request nickels</legend>
+  <label for="amount">Amount</label>
+  <input type="number" name="amount" required>
+  <br>
+  <label for="Reason">Reason</label>
+  <input type="text" name="reason">
+  <input type="text" name="request_type" value="debit" hidden readonly>
+  <input type="submit">
 </form>
 
 <form method="post" action="{{ url_for('public.nickel_request', member_id=member.id) }}">
-	<legend>Spend nickels</legend>
-	<label for="amount">Amount</label>
-	<input type="number" name="amount" required>
-	<br>
-	<label for="Reason">Reason</label>
-	<input type="text" name="reason">
-	<input type="text" name="request_type" value="credit" hidden readonly>
-	<input type="submit">
+  <legend>Spend nickels</legend>
+  <label for="amount">Amount</label>
+  <input type="number" name="amount" required>
+  <br>
+  <label for="Reason">Reason</label>
+  <input type="text" name="reason">
+  <input type="text" name="request_type" value="credit" hidden readonly>
+  <input type="submit">
 </form>
 {% endblock %}
 
