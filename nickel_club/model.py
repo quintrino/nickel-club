@@ -31,13 +31,14 @@ class ClubMember(db.Model):
     def not_deleted():
         return ClubMember.query.filter_by(deleted=False)
 
-    @staticmethod 
+    @staticmethod
     def get_not_deleted_or_404(member_id):
         member = ClubMember.query.get_or_404(member_id)
         if member.deleted:
             abort(404)
 
         return member
+
 
 class AdminUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)

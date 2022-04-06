@@ -87,10 +87,14 @@ REQUESTS_PER_PAGE = 30
 
 
 def get_paginated_requests(page=1) -> Pagination:
-    nickel_requests = NickelRequest.member_not_deleted().order_by(
-        # Proxy for most recent without getting dates involved
-        NickelRequest.id.desc()
-    ).paginate(page=page, per_page=REQUESTS_PER_PAGE)
+    nickel_requests = (
+        NickelRequest.member_not_deleted()
+        .order_by(
+            # Proxy for most recent without getting dates involved
+            NickelRequest.id.desc()
+        )
+        .paginate(page=page, per_page=REQUESTS_PER_PAGE)
+    )
 
     return nickel_requests
 
@@ -112,16 +116,14 @@ def delete_member(member_id):
 
     member.deleted = True
     db.session.commit()
-    flash(
-        f"Removed {member.name} from Nickel Club."
-    )
+    flash(f"Removed {member.name} from Nickel Club.")
     return redirect(url_for("admin.members"))
 
 
 @bp.route("/member/<int:member_id>", methods=("POST",))
 @admin_required
 def member(member_id):
-    '''Allow updating both name and nickel balance of members'''
+    """Allow updating both name and nickel balance of members"""
 
     member = ClubMember.get_not_deleted_or_404(member_id)
     if "nickels" not in request.form and "name" not in request.form:
