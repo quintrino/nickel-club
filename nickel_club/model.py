@@ -70,6 +70,9 @@ class NickelRequest(db.Model):
             case NickelRequestType.credit:
                 return f"{self.club_member.name} wants to spend {self.amount} nickels."
 
+    def __str__(self):
+        return f"<NickelRequest {self.id}, amount={self.amount}, member_id={self.member_id}, type={self.request_type}>"
+
 
 def set_admin_password(password):
     hashed = generate_password_hash(password)
