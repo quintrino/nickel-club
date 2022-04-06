@@ -20,6 +20,7 @@ def create_app(test_config=None):
         app.config.from_mapping(
             {
                 "SECRET_KEY": os.getenv("SECRET_KEY"),
+                "NICKEL_REQUEST_WEBHOOK_URL": os.getenv("NICKEL_REQUEST_WEBHOOK_URL"),
                 "SQLALCHEMY_DATABASE_URI": os.getenv("DATABASE_URL").replace(
                     "postgres://", "postgresql://", 1
                 ),

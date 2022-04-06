@@ -1,5 +1,6 @@
 from flask import (
     Blueprint,
+    current_app,
     render_template,
     abort,
     g,
@@ -8,6 +9,7 @@ from flask import (
     redirect,
     url_for,
 )
+import requests
 
 from nickel_club.model import db, ClubMember, NickelRequest
 
@@ -53,7 +55,33 @@ def nickel_request(member_id):
     db.session.add(nickel_request)
     db.session.commit()
     flash("Request submitted")
+    
+    fire_webhook(nickel_request)
     return redirect(url_for("public.member", member_id=member_id))
+
+
+def fire_webhook(nickel_request):
+    ''' If the app configuration contains a nickel request webhook url,
+        we notify the endpoint of each new nickel request
+    '''
+    url = current_app.config.get('NICKEL_REQUEST_WEBHOOK_URL')
+    if url is None:
+        current_app.logger.info('No nickel request webhook configured')
+        return
+
+    json = {
+        'club_member': nickel_request.club_member.name,
+        'amount': nickel_request.amount,
+        'reason': nickel_request.reason
+    }
+
+    current_app.logger.info(f'Nickel request web hook found:\n\t{url=}')
+    current_app.logger.info('\tNotifying endpoint of new nickel request...')
+    response = requests.post(url, json=json)
+    if response.status_code == 200:
+        current_app.logger.info('\tOK')
+    else:
+        current_app.logger.info(f'\tThe webhook endpoint returned {response.status_code}')
 
 
 @bp.route("/leaderboard", methods=["GET"])
