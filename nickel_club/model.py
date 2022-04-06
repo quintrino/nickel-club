@@ -47,14 +47,8 @@ class AdminUser(db.Model):
         return "<AdminUser %r>" % self.id
 
 
-class NickelRequestType(Enum):
-    debit = 1
-    credit = 2
-
-
 class NickelRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    request_type = db.Column(db.Enum(NickelRequestType), nullable=False)
     amount = db.Column(db.Integer, nullable=False)
     reason = db.Column(db.UnicodeText)
     member_id = db.Column(db.Integer, db.ForeignKey("club_member.id"), nullable=False)
@@ -64,14 +58,16 @@ class NickelRequest(db.Model):
         return NickelRequest.query.filter(NickelRequest.club_member.has(deleted=False))
 
     def explain(self):
-        match self.request_type:
-            case NickelRequestType.debit:
-                return f"{self.club_member.name} asked for {self.amount} nickels."
-            case NickelRequestType.credit:
-                return f"{self.club_member.name} wants to spend {self.amount} nickels."
+        if self.amount > 0:
+            return f"{self.club_member.name} asked for {self.amount} nickels."
+        else:
+            return f"{self.club_member.name} wants to spend {abs(self.amount)} nickels."
+
+    def request_type(self):
+        return "debit" if self.amount > 0 else "credit"
 
     def __str__(self):
-        return f"<NickelRequest {self.id}, amount={self.amount}, member_id={self.member_id}, type={self.request_type}>"
+        return f"<NickelRequest {self.id}, amount={self.amount}, member_id={self.member_id}>"
 
 
 def set_admin_password(password):

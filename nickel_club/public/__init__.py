@@ -9,7 +9,7 @@ from flask import (
     url_for,
 )
 
-from nickel_club.model import db, ClubMember, NickelRequest, NickelRequestType
+from nickel_club.model import db, ClubMember, NickelRequest
 
 bp = Blueprint("public", __name__, template_folder="templates")
 
@@ -32,16 +32,22 @@ def nickel_request(member_id):
     # ensure the member exists and is not deleted
     member = ClubMember.get_not_deleted_or_404(member_id)
 
-    request_type_str = request.form["request_type"]
     try:
-        request_type = (NickelRequestType[request_type_str],)
-    except KeyError:
+        amount = int(request.form["amount"])
+    except ValueError:
         abort(400)
 
+    match request.form["request_type"]:
+        case "debit":
+            pass
+        case "credit":
+            amount *= -1
+        case _:
+            abort(400)
+
     nickel_request = NickelRequest(
-        amount=request.form["amount"],
+        amount=amount,
         reason=request.form["reason"],
-        request_type=NickelRequestType[request.form["request_type"]],
         member_id=member_id,
     )
     db.session.add(nickel_request)

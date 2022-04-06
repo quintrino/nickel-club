@@ -17,7 +17,7 @@ from werkzeug.security import generate_password_hash
 from flask_sqlalchemy import Pagination
 from sqlalchemy import exc
 
-from nickel_club.model import AdminUser, ClubMember, NickelRequest, NickelRequestType
+from nickel_club.model import AdminUser, ClubMember, NickelRequest
 from nickel_club.model import db, set_admin_password
 
 bp = Blueprint("admin", __name__, url_prefix="/admin", template_folder="templates")
@@ -128,8 +128,10 @@ def member(member_id):
         abort(400)
 
     try:
-        member.nickels = request.form["nickels"]
+        member.nickels = int(request.form["nickels"])
         flash(f"Set {member.name}'s nickels to {member.nickels}")
+    except ValueError:
+        abort(400)
     except KeyError:
         pass
 
@@ -147,9 +149,11 @@ def member(member_id):
 @bp.route("/createmember", methods=["POST"])
 @admin_required
 def create_member():
-    member = ClubMember(
-        name=request.form["name"], nickels=request.form.get("nickels") or 0
-    )
+    try:
+        nickels = int(request.form.get("nickels")) or 0
+    except ValueError:
+        abort(400)
+    member = ClubMember(name=request.form["name"], nickels=nickels)
     db.session.add(member)
     db.session.commit()
     return redirect(url_for("admin.members"))

@@ -10,7 +10,7 @@
   <div class="card mt-2">
     <div class="card-body">
       <h4>
-        <em>{{ request.request_type.name.capitalize() }}</em> request from {{request.club_member.name}}
+        <em>{{ request.request_type().capitalize() }}</em> request from {{request.club_member.name}}
       </h4>
       <p>{{ request.explain() }}</p>
       <p><strong>Reason: </strong>{{request.reason}}</p>
