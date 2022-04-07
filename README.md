@@ -24,7 +24,7 @@ FLASK_ENV=development
 ```
 3. `poetry install`
 4. `poetry shell`
-5. `flask init-db` (this creates the tables)
+5. `flask db upgrade` (runs the alembic DB migrations)
 6. `flask run`
 
 ### Once you're already set up
