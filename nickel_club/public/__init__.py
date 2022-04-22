@@ -12,6 +12,7 @@ from flask import (
 import requests
 
 from nickel_club.model import db, ClubMember, NickelRequest
+from sqlalchemy import or_
 
 bp = Blueprint("public", __name__, template_folder="templates")
 
@@ -23,9 +24,18 @@ def about():
     return render_template("public/about.html", about_md=about_md)
 
 
-@bp.route("/member/<int:member_id>", methods=["GET"])
-def member(member_id):
-    member = ClubMember.get_not_deleted_or_404(member_id)
+@bp.route("/for/<member_name>", methods=["GET"])
+def member(member_name):
+    member = (
+        ClubMember.not_deleted()
+        .filter(
+            or_(
+                ClubMember.name == member_name,
+                ClubMember.name == member_name.capitalize(),
+            )
+        )
+        .one()
+    )
     return render_template("public/member.html", member=member)
 
 
@@ -57,7 +67,7 @@ def nickel_request(member_id):
     flash("Request submitted")
 
     fire_webhook(nickel_request)
-    return redirect(url_for("public.member", member_id=member_id))
+    return redirect(url_for("public.member", member_name=member.name))
 
 
 def fire_webhook(nickel_request):
