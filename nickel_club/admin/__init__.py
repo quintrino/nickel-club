@@ -155,9 +155,13 @@ def create_member():
         nickels = int(request.form.get("nickels")) or 0
     except ValueError:
         abort(400)
-    member = ClubMember(name=request.form["name"], nickels=nickels)
+    name = request.form["name"]
+    member = ClubMember(name=name, nickels=nickels)
     db.session.add(member)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except exc.IntegrityError as e:
+        flash(f"A user named {name} already exists!")
     return redirect(url_for("admin.members"))
 
 
