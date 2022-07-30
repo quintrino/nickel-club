@@ -47,6 +47,15 @@ class ClubMember(db.Model):
     def credit(self, to_subtract) -> None:
         self.nickels -= to_subtract
 
+    def rename(self, new_name) -> str:
+        old_name = self.name
+        self.name = new_name
+        return old_name
+
+    def delete(self) -> None:
+        self.deleted = True
+
+
 
 class AdminUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)

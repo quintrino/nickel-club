@@ -113,8 +113,7 @@ def requests():
 @admin_required
 def delete_member(member_id):
     member = ClubMember.get_not_deleted_or_404(member_id)
-
-    member.deleted = True
+    member.delete()
     db.session.commit()
     flash(f"Removed {member.name} from Nickel Club.")
     return redirect(url_for("admin.members"))
@@ -128,17 +127,10 @@ def debit_member(member_id):
         to_add = int(request.form["nickels"])
     except ValueError:
         abort(400)
-    ''' Todo: I think good OO principles would dictate that objects are
-    responsible for maintaining their own consistent state, so crediting and 
-    debiting should be method calls on ClubMember, with debit handling setting 
-    total_earnings
-    '''
-    member.nickels += to_add
-    member.total_earnings += to_add
+    member.debit(to_add)
     db.session.commit()
     flash(f"Added {to_add} nickels to {member.name}'s account")
     return redirect(url_for("admin.members"))
-
 
 
 @bp.route("/creditmember/<int:member_id>", methods=("POST",))
@@ -149,7 +141,7 @@ def credit_member(member_id):
         to_subtract = int(request.form["nickels"])
     except ValueError:
         abort(400)
-    member.nickels -= to_subtract
+    member.credit(to_subtract)
     db.session.commit()
     flash(f"Subtracted {to_subtract} nickels from {member.name}'s account")
     return redirect(url_for("admin.members"))
@@ -159,8 +151,7 @@ def credit_member(member_id):
 @admin_required
 def rename_member(member_id):
     member = ClubMember.get_not_deleted_or_404(member_id)
-    old_name = member.name
-    member.name = request.form["name"]
+    old_name = member.rename(request.form["name"])
     db.session.commit()
     flash(f"Renamed {old_name} to {member.name}")
     return redirect(url_for("admin.members"))
