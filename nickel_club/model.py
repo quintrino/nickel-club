@@ -39,6 +39,13 @@ class ClubMember(db.Model):
             abort(404)
 
         return member
+    
+    def debit(self, to_add) -> None:
+        self.nickels += to_add
+        self.total_earnings += to_add
+
+    def credit(self, to_subtract) -> None:
+        self.nickels -= to_subtract
 
 
 class AdminUser(db.Model):
