@@ -11,6 +11,7 @@
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Nickels</th>
+        <th scope="col">Total Earnings</th>
       </tr>
     </thead>
     <tbody>
@@ -18,6 +19,7 @@
       <tr>
         <td><a href="{{ url_for('public.member', member_name=member.name) }}">{{member.name}}</a></td>
         <td>{{member.nickels}}</td>
+        <td>{{member.total_earnings}}</td>
       </tr>
       {% else %}
       <p>There are no club members yet.</p>
