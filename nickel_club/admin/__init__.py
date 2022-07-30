@@ -155,41 +155,14 @@ def credit_member(member_id):
     return redirect(url_for("admin.members"))
 
 
-'''
-Todo: we should remove this route's ability to set nickels, since we can't 
-tell whether they're being debited or credited, meaning we can't keep 
-member.total_earnings in a consistent state. Once we've done that, the only 
-thing it does is rename, so we should rename it to rename_member
-'''
-@bp.route("/member/<int:member_id>", methods=("POST",))
+@bp.route("/renamemember/<int:member_id>", methods=("POST",))
 @admin_required
-def member(member_id):
-    """Allow updating both name and nickel balance of members"""
-
+def rename_member(member_id):
     member = ClubMember.get_not_deleted_or_404(member_id)
-    if "nickels" not in request.form and "name" not in request.form:
-        abort(400)
-
-    try:
-        member.nickels = int(request.form["nickels"])
-        flash(f"Set {member.name}'s nickels to {member.nickels}")
-    except ValueError:
-        abort(400)
-    except KeyError:
-        # Since we've already checked that at least one of "nickels" and "name" are present,
-        # this means the name, and not the nickels were being set
-        pass
-
-    try:
-        old_name = member.name
-        member.name = request.form["name"]
-        flash(f"Renamed {old_name} to {member.name}")
-    except KeyError:
-        # Since we've already checked that at least one of "nickels" and "name" are present,
-        # this means the nickels, and not the name were being set
-        pass
-
+    old_name = member.name
+    member.name = request.form["name"]
     db.session.commit()
+    flash(f"Renamed {old_name} to {member.name}")
     return redirect(url_for("admin.members"))
 
 
