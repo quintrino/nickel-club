@@ -165,12 +165,21 @@ def create_member():
     except ValueError:
         abort(400)
     name = request.form["name"]
-    member = ClubMember(name=name, nickels=nickels)
+    member = ClubMember(name=name, nickels=nickels, total_earnings=nickels)
     db.session.add(member)
     try:
         db.session.commit()
     except exc.IntegrityError as e:
-        flash(f"A user named {name} already exists!")
+        # check if the problem was that the new member has the same name as an 
+        # existing member.
+        # This is a filthy hack, but I don't think there's a better way
+        # I blame python
+        dup_name_msg = "duplicate key value violates unique constraint \"club_member_name_key\""
+        if dup_name_msg in e.orig.args[0]:
+            flash(f"A user named {name} already exists!")
+        else:
+            raise e
+
     return redirect(url_for("admin.members"))
 
 
