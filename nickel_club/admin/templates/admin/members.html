@@ -37,12 +37,19 @@
     </h2>
     <div id="collapseMember{{member.id}}" class="accordion-collapse collapse" aria-labelledby="headingMember{{member.id}}">
       <div class="accordion-body">
-
-        <form action="{{ url_for('admin.member', member_id=member.id) }}" method="POST">
+        <p>Total earnings: {{member.total_earnings}}</p>
+        <form action="{{ url_for('admin.debit_member', member_id=member.id) }}" method="POST">
           <div class="input-group mb-3">
-            <span class="input-group-text">Set Nickels</span>
-            <input name="nickels" id="nickelInputMember{{member.id}}" type="number" class="form-control" placeholder="Nickels" value="{{member.nickels}}" required>
-            <button type="submit" class="btn btn-outline-primary">Set</button>
+            <span class="input-group-text">Add Nickels</span>
+            <input name="nickels" id="nickelInputMember{{member.id}}" type="number" class="form-control" placeholder="Nickels" value="0" required>
+            <button type="submit" class="btn btn-outline-primary">Add</button>
+          </div>
+        </form>
+        <form action="{{ url_for('admin.credit_member', member_id=member.id) }}" method="POST">
+          <div class="input-group mb-3">
+            <span class="input-group-text">Subtract Nickels</span>
+            <input name="nickels" id="nickelInputMember{{member.id}}" type="number" class="form-control" placeholder="Nickels" value="0" required>
+            <button type="submit" class="btn btn-outline-primary">Subtract</button>
           </div>
         </form>
         <form action="{{ url_for('admin.member', member_id=member.id) }}" method="POST">

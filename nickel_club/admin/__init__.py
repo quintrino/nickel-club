@@ -120,6 +120,47 @@ def delete_member(member_id):
     return redirect(url_for("admin.members"))
 
 
+@bp.route("/debitmember/<int:member_id>", methods=("POST",))
+@admin_required
+def debit_member(member_id):
+    member = ClubMember.get_not_deleted_or_404(member_id)
+    try:
+        to_add = int(request.form["nickels"])
+    except ValueError:
+        abort(400)
+    ''' Todo: I think good OO principles would dictate that objects are
+    responsible for maintaining their own consistent state, so crediting and 
+    debiting should be method calls on ClubMember, with debit handling setting 
+    total_earnings
+    '''
+    member.nickels += to_add
+    member.total_earnings += to_add
+    db.session.commit()
+    flash(f"Added {to_add} nickels to {member.name}'s account")
+    return redirect(url_for("admin.members"))
+
+
+
+@bp.route("/creditmember/<int:member_id>", methods=("POST",))
+@admin_required
+def credit_member(member_id):
+    member = ClubMember.get_not_deleted_or_404(member_id)
+    try:
+        to_subtract = int(request.form["nickels"])
+    except ValueError:
+        abort(400)
+    member.nickels -= to_subtract
+    db.session.commit()
+    flash(f"Subtracted {to_subtract} nickels from {member.name}'s account")
+    return redirect(url_for("admin.members"))
+
+
+'''
+Todo: we should remove this route's ability to set nickels, since we can't 
+tell whether they're being debited or credited, meaning we can't keep 
+member.total_earnings in a consistent state. Once we've done that, the only 
+thing it does is rename, so we should rename it to rename_member
+'''
 @bp.route("/member/<int:member_id>", methods=("POST",))
 @admin_required
 def member(member_id):
@@ -135,6 +176,8 @@ def member(member_id):
     except ValueError:
         abort(400)
     except KeyError:
+        # Since we've already checked that at least one of "nickels" and "name" are present,
+        # this means the name, and not the nickels were being set
         pass
 
     try:
@@ -142,6 +185,8 @@ def member(member_id):
         member.name = request.form["name"]
         flash(f"Renamed {old_name} to {member.name}")
     except KeyError:
+        # Since we've already checked that at least one of "nickels" and "name" are present,
+        # this means the nickels, and not the name were being set
         pass
 
     db.session.commit()
