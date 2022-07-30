@@ -99,4 +99,6 @@ def fire_webhook(nickel_request):
 @bp.route("/leaderboard", methods=["GET"])
 def leaderboard():
     members = ClubMember.not_deleted().order_by(ClubMember.nickels.desc()).all()
-    return render_template("public/leaderboard.html", members=members)
+    members_by_total = sorted(members, key=lambda m: m.total_earnings, reverse=True)
+    return render_template("public/leaderboard.html",
+            members=members, members_by_total=members_by_total)

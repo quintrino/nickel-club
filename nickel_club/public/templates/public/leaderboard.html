@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% block content %}
+<h2>Current Balance</h2>
 <div>
   <table class="table friends-table">
     <thead>
       <tr>
         <th scope="col">Name</th>
         <th scope="col">Nickels</th>
-        <th scope="col">Total Earnings</th>
       </tr>
     </thead>
     <tbody>
@@ -19,6 +19,27 @@
       <tr>
         <td><a href="{{ url_for('public.member', member_name=member.name) }}">{{member.name}}</a></td>
         <td>{{member.nickels}}</td>
+      </tr>
+      {% else %}
+      <p>There are no club members yet.</p>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<h2>Total Earnings</h2>
+<div>
+  <table class="table friends-table">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Total Earnings</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for member in members_by_total %}
+      <tr>
+        <td><a href="{{ url_for('public.member', member_name=member.name) }}">{{member.name}}</a></td>
         <td>{{member.total_earnings}}</td>
       </tr>
       {% else %}
@@ -26,8 +47,6 @@
       {% endfor %}
     </tbody>
   </table>
-
-
 </div>
 
 
