@@ -37,7 +37,7 @@
     </h2>
     <div id="collapseMember{{member.id}}" class="accordion-collapse collapse" aria-labelledby="headingMember{{member.id}}">
       <div class="accordion-body">
-        <p>Total earnings: {{member.total_earnings}}</p>
+        <p>Total earnings: {{member.total_earnings}} Nickels</p>
         <form action="{{ url_for('admin.debit_member', member_id=member.id) }}" method="POST">
           <div class="input-group mb-3">
             <span class="input-group-text">Add Nickels</span>
